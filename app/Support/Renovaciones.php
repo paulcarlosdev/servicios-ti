@@ -26,7 +26,7 @@ class Renovaciones
         return self::lineas()->filter(fn (ContratoLinea $l) => $l->alerta() === $alerta)->values();
     }
 
-    /** Ingreso mensual recurrente por tipo de línea (S/, sin IGV). @return array<string, float> */
+    /** Ingreso mensual recurrente por tipo de línea (S/, IGV incluido). @return array<string, float> */
     public static function mrrPorTipo(): array
     {
         $lineas = ContratoLinea::query()->with('contrato')

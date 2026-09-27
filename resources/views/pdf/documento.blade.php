@@ -25,7 +25,7 @@
     .box { background: #f3f4f6; padding: 10px 12px; margin-bottom: 14px; }
     .lineas th { text-align: left; font-size: 9px; text-transform: uppercase; color: #6b7280; border-bottom: 1px solid #d1d5db; padding: 6px 4px; }
     .lineas td { border-bottom: 1px solid #e5e7eb; padding: 7px 4px; vertical-align: top; }
-    .totales { width: 260px; margin-left: auto; margin-top: 10px; }
+    .totales { width: 280px; margin-left: auto; margin-top: 10px; }
     .totales td { padding: 3px 4px; }
     .total td { border-top: 2px solid #111827; font-weight: bold; font-size: 12px; padding-top: 6px; }
     .condiciones { margin-top: 18px; }
@@ -94,8 +94,8 @@
             <th>Servicio</th>
             <th>Periodo</th>
             <th class="right">Cant.</th>
-            <th class="right">P. unitario</th>
-            <th class="right">Subtotal</th>
+            <th class="right">P. unitario{{ $doc->aplica_igv ? ' c/IGV' : '' }}</th>
+            <th class="right">Total{{ $doc->aplica_igv ? ' c/IGV' : '' }}</th>
         </tr>
     </thead>
     <tbody>
@@ -121,8 +121,7 @@
                     {{ F::pen($u['pen']) }}
                     @unless ($l->ocultar_usd)<br><span class="muted">{{ F::usd($u['usd']) }}</span>@endunless
                 </td>
-                <td class="right">
-                    {{ F::pen($s['pen']) }}
+                <td class="right"><strong>{{ F::pen($s['pen']) }}</strong>
                     @unless ($l->ocultar_usd)<br><span class="muted">{{ F::usd($s['usd']) }}</span>@endunless
                 </td>
             </tr>
@@ -131,11 +130,11 @@
 </table>
 
 <table class="totales">
-    <tr><td>Subtotal</td><td class="right">{{ F::pen($totales['subPen']) }}</td></tr>
     @if ($doc->aplica_igv)
+        <tr><td>Base imponible</td><td class="right">{{ F::pen($totales['subPen']) }}</td></tr>
         <tr><td>IGV ({{ round($totales['tasa'] * 100) }}%)</td><td class="right">{{ F::pen($totales['igvPen']) }}</td></tr>
     @endif
-    <tr class="total"><td>Total</td><td class="right">{{ F::pen($totales['totalPen']) }}</td></tr>
+    <tr class="total"><td>Total a pagar{{ $doc->aplica_igv ? ' (IGV incluido)' : '' }}</td><td class="right">{{ F::pen($totales['totalPen']) }}</td></tr>
     @if ($algunUsd)
         <tr><td class="muted">Equivalente</td><td class="right muted">{{ F::usd($totales['totalUsd']) }}</td></tr>
     @endif

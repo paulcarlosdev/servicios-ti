@@ -3,7 +3,7 @@
     $barras = ['sky' => 'bg-sky-500', 'violet' => 'bg-violet-500', 'emerald' => 'bg-emerald-500', 'amber' => 'bg-amber-500'];
 @endphp
 <x-filament-widgets::widget>
-    <x-filament::section heading="Ingreso recurrente por tipo" description="Equivalente mensual en soles, sin IGV">
+    <x-filament::section heading="Ingreso recurrente por tipo" description="Equivalente mensual en soles, IGV incluido">
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             @foreach ($filas as $f)
                 <div title="{{ $f['tipo']->getLabel() }}: {{ F::pen($f['monto']) }} ({{ $f['pct'] }}%)">

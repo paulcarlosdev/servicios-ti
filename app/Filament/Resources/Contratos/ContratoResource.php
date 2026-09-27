@@ -189,6 +189,7 @@ class ContratoResource extends Resource
     {
         return Toggle::make('aplica_igv')
             ->label(fn () => 'Aplicar IGV '.round(Empresa::igv() * 100).'%')
+            ->helperText('Los precios de los servicios se ingresan como monto final a pagar; el IGV se desglosa al pie del documento.')
             ->default(true)
             ->live();
     }
@@ -428,9 +429,8 @@ class ContratoResource extends Resource
                     $tc = (float) $get('tipo_cambio') ?: 1;
                     $monto = $record->lineas->whereIn('id', $get('lineas') ?? [])
                         ->sum(fn ($l) => Montos::subtotal(['precio' => $l->precio * $k, 'moneda' => $l->moneda, 'cantidad' => $l->cantidad], $tc)['pen']);
-                    $monto *= $record->aplica_igv ? 1 + Empresa::igv() : 1;
 
-                    return 'Monto a facturar por la renovación: '.Formato::pen($monto).($record->aplica_igv ? ' (con IGV)' : '');
+                    return 'Monto a facturar por la renovación: '.Formato::pen($monto).($record->aplica_igv ? ' (IGV incluido)' : '');
                 })->weight('bold'),
             ])
             ->action(function (Contrato $record, array $data) use ($renovables) {

@@ -97,7 +97,7 @@ class Contrato extends Model
         return $this->vigente() ? $this->lineas->pluck('vence_el')->filter()->sort()->first() : null;
     }
 
-    /** Ingreso mensual recurrente en soles, sin IGV. */
+    /** Ingreso mensual recurrente en soles, IGV incluido. */
     public function ingresoMensual(): float
     {
         return $this->lineas->sum(fn (ContratoLinea $l) => $l->mensualPen());

@@ -1,18 +1,21 @@
 @php use App\Support\Formato as F; @endphp
 <div class="space-y-4 text-sm">
     <dl class="space-y-1.5">
-        <div class="flex justify-between text-gray-600 dark:text-gray-300">
-            <dt>Subtotal</dt><dd class="tabular-nums">{{ F::pen($t['subPen']) }}</dd>
-        </div>
-        <div class="flex justify-between text-gray-600 dark:text-gray-300">
-            <dt>IGV ({{ round($t['tasa'] * 100) }}%)</dt>
-            <dd class="tabular-nums">{{ $igv ? F::pen($t['igvPen']) : 'No aplica' }}</dd>
-        </div>
+        @if ($igv)
+            <div class="flex justify-between text-gray-600 dark:text-gray-300">
+                <dt>Base imponible</dt><dd class="tabular-nums">{{ F::pen($t['subPen']) }}</dd>
+            </div>
+            <div class="flex justify-between text-gray-600 dark:text-gray-300">
+                <dt>IGV ({{ round($t['tasa'] * 100) }}%)</dt><dd class="tabular-nums">{{ F::pen($t['igvPen']) }}</dd>
+            </div>
+        @else
+            <div class="flex justify-between text-gray-600 dark:text-gray-300"><dt>IGV</dt><dd>No aplica</dd></div>
+        @endif
         <div class="flex items-baseline justify-between border-t border-gray-200 pt-2 dark:border-white/10">
-            <dt class="font-semibold text-gray-950 dark:text-white">Total</dt>
+            <dt class="font-semibold text-gray-950 dark:text-white">Total{{ $igv ? ' a pagar' : '' }}</dt>
             <dd class="text-xl font-bold tabular-nums text-gray-950 dark:text-white">{{ F::pen($t['totalPen']) }}</dd>
         </div>
-        <p class="text-right text-xs text-gray-500 dark:text-gray-400">≈ {{ F::usd($t['totalUsd']) }} · TC {{ F::num($tc, 3) }}</p>
+        <p class="text-right text-xs text-gray-500 dark:text-gray-400">{{ $igv ? 'IGV incluido · ' : '' }}≈ {{ F::usd($t['totalUsd']) }} · TC {{ F::num($tc, 3) }}</p>
     </dl>
 
     @if ($renovaciones->isNotEmpty())

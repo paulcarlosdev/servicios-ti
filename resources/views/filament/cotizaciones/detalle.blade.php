@@ -50,7 +50,7 @@
                 @if ($verMontos)
                     <div class="text-right">
                         <p class="text-sm font-semibold tabular-nums text-gray-950 dark:text-white">{{ F::pen($s['pen']) }}</p>
-                        <p class="text-xs tabular-nums text-gray-500">{{ F::usd($s['usd']) }}</p>
+                        <p class="text-xs tabular-nums text-gray-500">{{ F::usd($s['usd']) }}{{ $c->aplica_igv ? ' · c/IGV' : '' }}</p>
                     </div>
                 @endif
             </div>
@@ -59,11 +59,11 @@
 
     @if ($verMontos)
         <dl class="ml-auto w-full max-w-xs space-y-1.5 text-sm">
-            <div class="flex justify-between text-gray-600 dark:text-gray-300"><dt>Subtotal</dt><dd class="tabular-nums">{{ F::pen($t['subPen']) }}</dd></div>
             @if ($c->aplica_igv)
+                <div class="flex justify-between text-gray-600 dark:text-gray-300"><dt>Base imponible</dt><dd class="tabular-nums">{{ F::pen($t['subPen']) }}</dd></div>
                 <div class="flex justify-between text-gray-600 dark:text-gray-300"><dt>IGV ({{ round($t['tasa'] * 100) }}%)</dt><dd class="tabular-nums">{{ F::pen($t['igvPen']) }}</dd></div>
             @endif
-            <div class="flex justify-between border-t border-gray-200 pt-2 text-base font-bold text-gray-950 dark:border-white/10 dark:text-white"><dt>Total</dt><dd class="tabular-nums">{{ F::pen($t['totalPen']) }}</dd></div>
+            <div class="flex justify-between border-t border-gray-200 pt-2 text-base font-bold text-gray-950 dark:border-white/10 dark:text-white"><dt>Total a pagar</dt><dd class="tabular-nums">{{ F::pen($t['totalPen']) }}</dd></div>
             <div class="flex justify-between text-xs text-gray-500"><dt>Equivalente · TC {{ F::num($c->tipo_cambio, 3) }}</dt><dd class="tabular-nums">{{ F::usd($t['totalUsd']) }}</dd></div>
         </dl>
     @endif

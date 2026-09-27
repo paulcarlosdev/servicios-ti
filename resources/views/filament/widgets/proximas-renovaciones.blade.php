@@ -20,7 +20,7 @@
                 @if ($verMontos)
                     <div class="hidden text-right sm:block">
                         <p class="text-sm tabular-nums text-gray-950 dark:text-white">{{ F::pen($l->subtotal()['pen']) }}</p>
-                        <p class="text-xs text-gray-500">sin IGV</p>
+                        <p class="text-xs text-gray-500">IGV incluido</p>
                     </div>
                 @endif
                 <div class="w-28 text-right">

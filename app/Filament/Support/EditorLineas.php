@@ -185,7 +185,7 @@ class EditorLineas
                     ->columnSpan(['default' => 6, 'md' => 2]),
 
                 TextInput::make('precio')
-                    ->label('Precio unitario')
+                    ->label(fn (Get $get) => $get('../../aplica_igv') ? 'Precio unitario (IGV incluido)' : 'Precio unitario')
                     ->numeric()
                     ->step(0.01)
                     ->minValue(0)
@@ -391,9 +391,10 @@ class EditorLineas
     private static function resumenLinea(Get $get, string $campoInicio): string
     {
         if (blank($get('precio')) || blank($get('moneda'))) {
-            return 'Montos sin IGV.';
+            return 'Elige un servicio para ver el subtotal.';
         }
         $tc = (float) $get('../../tipo_cambio') ?: 1;
+        $igv = (bool) $get('../../aplica_igv');
         $s = Montos::subtotal(['precio' => $get('precio'), 'moneda' => $get('moneda'), 'cantidad' => $get('cantidad')], $tc);
         $periodo = self::periodoDe($get('periodo'));
         $inicio = $get('fecha_inicio') ?: $get("../../{$campoInicio}");
@@ -401,6 +402,6 @@ class EditorLineas
             ? 'Primera renovación el '.Formato::fecha(Carbon::parse($inicio)->addMonthsNoOverflow($periodo->meses()))
             : 'Pago único, no se renueva';
 
-        return 'Subtotal '.Formato::pen($s['pen']).' ('.Formato::usd($s['usd']).') · '.$renovacion.' · Montos sin IGV.';
+        return 'Total '.Formato::pen($s['pen']).' ('.Formato::usd($s['usd']).')'.($igv ? ' IGV incluido' : ' sin IGV').' · '.$renovacion;
     }
 }

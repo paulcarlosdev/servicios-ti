@@ -59,7 +59,7 @@
                             @if ($verMontos)
                                 <div class="text-right">
                                     <p class="text-sm font-semibold tabular-nums text-gray-950 dark:text-white">{{ F::pen($s['pen']) }}</p>
-                                    <p class="text-xs tabular-nums text-gray-500">{{ $l->ocultar_usd ? 'USD oculto' : F::usd($s['usd']) }}</p>
+                                    <p class="text-xs tabular-nums text-gray-500">{{ $l->ocultar_usd ? 'USD oculto' : F::usd($s['usd']) }}{{ $c->aplica_igv ? ' · c/IGV' : '' }}</p>
                                 </div>
                             @endif
                         </div>

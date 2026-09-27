@@ -42,7 +42,7 @@ class ResumenPanel extends StatsOverviewWidget
         if (auth()->user()->puedeVer('montos')) {
             $mrr = array_sum(Renovaciones::mrrPorTipo());
             $stats[] = Stat::make('Ingreso mensual recurrente', Formato::pen($mrr))
-                ->description('Sin IGV · equivalente mensual')
+                ->description('IGV incluido · equivalente mensual')
                 ->descriptionIcon(Heroicon::OutlinedArrowTrendingUp)
                 ->color('primary');
         }
