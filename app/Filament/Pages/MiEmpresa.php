@@ -20,7 +20,6 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Mi empresa (HU-017): ficha única cuyos datos y logo encabezan los PDF,
@@ -75,6 +74,13 @@ class MiEmpresa extends Page
             ->acceptedFileTypes(['image/png', 'image/jpeg'])
             ->maxSize(1024)
             ->imagePreviewHeight('96')
+            // URL relativa al dominio actual: la miniatura no depende de APP_URL (evita "Cargando" eterno en hosting)
+            ->getUploadedFileUsing(fn (FileUpload $component, string $file, string|array|null $storedFileNames): array => [
+                'name' => is_string($storedFileNames) ? $storedFileNames : basename($file),
+                'size' => $component->getDisk()->exists($file) ? $component->getDisk()->size($file) : 0,
+                'type' => $component->getDisk()->exists($file) ? $component->getDisk()->mimeType($file) : null,
+                'url' => '/storage/'.ltrim($file, '/'),
+            ])
             ->validationMessages([
                 'mimetypes' => 'Formato no válido: usa PNG o JPG.',
                 'max' => 'Imagen muy pesada: máximo 1 MB.',
@@ -219,7 +225,8 @@ class MiEmpresa extends Page
 
         return match (true) {
             $archivo instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile => $archivo->temporaryUrl(),
-            is_string($archivo) && $archivo !== '' => Storage::disk('public')->url($archivo),
+            // Relativa al dominio actual: evita "mixed content" si APP_URL quedó en http://
+            is_string($archivo) && $archivo !== '' => '/storage/'.ltrim($archivo, '/'),
             default => null,
         };
     }

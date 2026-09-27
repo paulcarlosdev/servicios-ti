@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Usuarios;
 
 use App\Enums\Rol;
 use App\Filament\Resources\Usuarios\Pages\ManageUsuarios;
+use App\Filament\Support\Contrasena;
 use App\Filament\Support\Ui;
 use App\Models\User;
 use BackedEnum;
@@ -113,6 +114,7 @@ class UsuarioResource extends Resource
                         ->mutateDataUsing(fn (array $data, User $record) => $record->is(auth()->user()) ? ['rol' => Rol::Admin->value] + $data : $data)
                         ->successNotificationTitle('Usuario actualizado')
                         ->successNotification(fn ($notification, User $record) => $notification->body("{$record->name} · {$record->rol->getLabel()}")),
+                    Contrasena::accionAdmin(),
                     Action::make('enviarEnlace')
                         ->label('Enviar enlace para nueva contraseña')
                         ->icon(Heroicon::OutlinedKey)

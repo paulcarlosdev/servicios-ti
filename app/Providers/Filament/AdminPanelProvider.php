@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Panel as PanelDeControl;
+use App\Filament\Support\Contrasena;
 use App\Support\Empresa;
 use App\Support\Formato;
 use Filament\Http\Middleware\Authenticate;
@@ -46,6 +47,9 @@ class AdminPanelProvider extends PanelProvider
             ->maxContentWidth(Width::Full)
             ->sidebarCollapsibleOnDesktop()
             ->globalSearchKeyBindings(['ctrl+k', 'command+k'])
+            ->userMenuItems([
+                fn () => Contrasena::accionPropia(), // Cambiar contraseña propia (menú arriba a la derecha); se resuelve con el panel ya activo
+            ])
             ->navigationGroups([
                 NavigationGroup::make('Comercial')->collapsible(false),
                 NavigationGroup::make('Catálogo')->collapsible(false),
